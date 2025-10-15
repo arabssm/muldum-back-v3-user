@@ -39,4 +39,5 @@ out/
 .kotlin
 
 ### env ###
-*.env
+.env
+!.env.example
