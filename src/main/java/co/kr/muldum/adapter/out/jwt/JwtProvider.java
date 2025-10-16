@@ -19,8 +19,18 @@ public class JwtProvider implements JwtPort {
     public JwtProvider(
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.access-token-expiration}") long accessTokenExpiration) {
+        validateSecret(secret);
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.accessTokenExpiration = accessTokenExpiration;
+    }
+
+    private void validateSecret(String secret) {
+        if (secret == null || secret.trim().isEmpty()) {
+            throw new IllegalArgumentException("JWT secret cannot be null or empty");
+        }
+        if (secret.length() < 32) {
+            throw new IllegalArgumentException("JWT secret must be at least 32 characters long for security");
+        }
     }
 
     @Override
