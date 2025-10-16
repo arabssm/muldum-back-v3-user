@@ -22,7 +22,7 @@ public class GoogleLoginResponse {
         response.userType = loginResponse.getUserType();
         response.userId = loginResponse.getUserId();
         response.name = loginResponse.getName();
-        response.teamId = loginResponse.getTeamId();
+        response.teamId = loginResponse.getTeamId().orElse(null);
         response.role = loginResponse.getRole();
         response.accessToken = loginResponse.getAccessToken();
         return response;
