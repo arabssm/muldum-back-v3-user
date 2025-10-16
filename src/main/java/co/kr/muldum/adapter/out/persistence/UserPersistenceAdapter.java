@@ -10,16 +10,14 @@ import java.util.Optional;
 public class UserPersistenceAdapter implements LoadUserPort {
 
     private final UserJpaRepository userJpaRepository;
-    private final UserMapper userMapper;
 
-    public UserPersistenceAdapter(UserJpaRepository userJpaRepository, UserMapper userMapper) {
+    public UserPersistenceAdapter(UserJpaRepository userJpaRepository) {
         this.userJpaRepository = userJpaRepository;
-        this.userMapper = userMapper;
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
         return userJpaRepository.findByEmail(email)
-                .map(userMapper::toDomain);
+                .map(UserMapper::toDomain);
     }
 }
