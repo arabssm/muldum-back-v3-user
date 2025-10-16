@@ -3,12 +3,13 @@ package co.kr.muldum.adapter.out.persistence;
 import co.kr.muldum.domain.model.Student;
 import co.kr.muldum.domain.model.Teacher;
 import co.kr.muldum.domain.model.User;
-import org.springframework.stereotype.Component;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-@Component
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserMapper {
 
-    public User toDomain(UserJpaEntity entity) {
+    public static User toDomain(UserJpaEntity entity) {
         if (entity instanceof StudentJpaEntity studentEntity) {
             return Student.of(
                     studentEntity.getUserId(),
@@ -27,7 +28,7 @@ public class UserMapper {
         throw new IllegalArgumentException("Unknown entity type: " + entity.getClass().getName());
     }
 
-    public UserJpaEntity toEntity(User user) {
+    public static UserJpaEntity toEntity(User user) {
         if (user instanceof Student student) {
             return new StudentJpaEntity(
                     student.getUserId(),
