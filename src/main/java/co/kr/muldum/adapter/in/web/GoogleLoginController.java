@@ -25,14 +25,17 @@ public class GoogleLoginController {
     private final GoogleLoginUseCase googleLoginUseCase;
     private final String googleClientId;
     private final String googleRedirectUri;
+    private final String googleAuthUri;
 
     public GoogleLoginController(
             GoogleLoginUseCase googleLoginUseCase,
             @Value("${google.oauth.client-id}") String googleClientId,
-            @Value("${google.oauth.redirect-uri}") String googleRedirectUri) {
+            @Value("${google.oauth.redirect-uri}") String googleRedirectUri,
+            @Value("${google.oauth.auth-uri}") String googleAuthUri) {
         this.googleLoginUseCase = googleLoginUseCase;
         this.googleClientId = googleClientId;
         this.googleRedirectUri = googleRedirectUri;
+        this.googleAuthUri = googleAuthUri;
     }
 
     /**
@@ -42,13 +45,14 @@ public class GoogleLoginController {
     @GetMapping("/login/google")
     public RedirectView redirectToGoogleLogin() {
         String googleAuthUrl = String.format(
-            "https://accounts.google.com/o/oauth2/v2/auth?" +
+            "%s?" +
             "client_id=%s&" +
             "redirect_uri=%s&" +
             "response_type=code&" +
             "scope=email profile&" +
             "access_type=offline&" +
             "prompt=consent",
+            googleAuthUri,
             googleClientId,
             googleRedirectUri
         );
