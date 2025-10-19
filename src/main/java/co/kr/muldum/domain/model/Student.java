@@ -4,7 +4,7 @@ public class Student extends User {
     private final Long teamId;
 
     private Student(Long userId, String email, String name, Long teamId) {
-        super(userId, email, name, UserType.STUDENT, Role.STUDENT);
+        super(userId, email, name, Role.STUDENT);
         this.teamId = teamId;
     }
 
