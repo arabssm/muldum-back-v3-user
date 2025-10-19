@@ -7,23 +7,28 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GoogleLoginResponse {
 
-    private Role role;
-    private Long userId;
-    private String name;
-    private Long teamId;
-    private String accessToken;
+    private final Role role;
+    private final Long userId;
+    private final String name;
+    private final Long teamId;
+    private final String accessToken;
 
-    private GoogleLoginResponse() {
+    private GoogleLoginResponse(Role role, Long userId, String name, Long teamId, String accessToken) {
+        this.role = role;
+        this.userId = userId;
+        this.name = name;
+        this.teamId = teamId;
+        this.accessToken = accessToken;
     }
 
     public static GoogleLoginResponse from(LoginResponse loginResponse) {
-        GoogleLoginResponse response = new GoogleLoginResponse();
-        response.role = loginResponse.getRole();
-        response.userId = loginResponse.getUserId();
-        response.name = loginResponse.getName();
-        response.teamId = loginResponse.getTeamId().orElse(null);
-        response.accessToken = loginResponse.getAccessToken();
-        return response;
+        return new GoogleLoginResponse(
+            loginResponse.getRole(),
+            loginResponse.getUserId(),
+            loginResponse.getName(),
+            loginResponse.getTeamId().orElse(null),
+            loginResponse.getAccessToken()
+        );
     }
 
     public Role getRole() {
