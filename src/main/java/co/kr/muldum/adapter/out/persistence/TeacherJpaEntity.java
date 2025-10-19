@@ -1,6 +1,6 @@
 package co.kr.muldum.adapter.out.persistence;
 
-import co.kr.muldum.domain.model.UserType;
+import co.kr.muldum.domain.model.Role;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
@@ -12,6 +12,6 @@ public class TeacherJpaEntity extends UserJpaEntity {
     }
 
     public TeacherJpaEntity(Long userId, String email, String name) {
-        super(userId, email, name, UserType.TEACHER);
+        super(userId, email, name, Role.TEACHER);
     }
 }
