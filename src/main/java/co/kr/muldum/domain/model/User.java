@@ -4,17 +4,15 @@ public abstract class User {
     private final Long userId;
     private final String email;
     private final String name;
-    private final UserType userType;
     private final Role role;
 
-    protected User(Long userId, String email, String name, UserType userType, Role role) {
+    protected User(Long userId, String email, String name, Role role) {
         validateEmail(email);
         validateName(name);
 
         this.userId = userId;
         this.email = email;
         this.name = name;
-        this.userType = userType;
         this.role = role;
     }
 
@@ -43,10 +41,6 @@ public abstract class User {
 
     public String getName() {
         return name;
-    }
-
-    public UserType getUserType() {
-        return userType;
     }
 
     public Role getRole() {
