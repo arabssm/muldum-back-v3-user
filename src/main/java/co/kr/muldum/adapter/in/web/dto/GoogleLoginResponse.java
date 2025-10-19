@@ -26,7 +26,7 @@ public class GoogleLoginResponse {
             loginResponse.getRole(),
             loginResponse.getUserId(),
             loginResponse.getName(),
-            loginResponse.getTeamId().orElse(null),
+            loginResponse.getTeamId(),
             loginResponse.getAccessToken()
         );
     }
