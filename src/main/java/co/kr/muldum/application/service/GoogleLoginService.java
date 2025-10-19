@@ -29,21 +29,18 @@ public class GoogleLoginService implements GoogleLoginUseCase {
 
     @Override
     public LoginResponse login(GoogleLoginCommand command) {
-        // 1. Get email from Google OAuth
+
         String email = googleOAuthPort.getEmailFromAuthCode(command.getAuthorizationCode());
 
-        // 2. Find user by email
         User user = loadUserPort.findByEmail(email)
                 .orElseThrow(() -> new UnregisteredUserException(email));
 
-        // 3. Generate access token
         String accessToken = jwtPort.generateAccessToken(
                 user.getUserId(),
                 user.getEmail(),
                 user.getRole().getValue()
         );
 
-        // 4. Build response based on user type
         if (user instanceof Student student) {
             return LoginResponse.ofStudent(
                     student.getUserId(),
