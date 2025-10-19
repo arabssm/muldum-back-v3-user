@@ -67,10 +67,9 @@ public class GoogleLoginController {
 
             return ResponseEntity.ok(Map.of(
                 "message", "로그인 성공!",
-                "userType", loginResponse.getUserType().toString(),
+                "role", loginResponse.getRole().toString(),
                 "userId", loginResponse.getUserId(),
                 "name", loginResponse.getName(),
-                "role", loginResponse.getRole(),
                 "accessToken", loginResponse.getAccessToken(),
                 "teamId", loginResponse.getTeamId().orElse(null)
             ));
