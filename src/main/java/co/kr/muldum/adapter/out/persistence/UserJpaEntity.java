@@ -1,6 +1,6 @@
 package co.kr.muldum.adapter.out.persistence;
 
-import co.kr.muldum.domain.model.UserType;
+import co.kr.muldum.domain.model.Role;
 import jakarta.persistence.*;
 
 @Entity
@@ -22,16 +22,16 @@ public abstract class UserJpaEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type", insertable = false, updatable = false)
-    private UserType userType;
+    private Role role;
 
     protected UserJpaEntity() {
     }
 
-    protected UserJpaEntity(Long userId, String email, String name, UserType userType) {
+    protected UserJpaEntity(Long userId, String email, String name, Role role) {
         this.userId = userId;
         this.email = email;
         this.name = name;
-        this.userType = userType;
+        this.role = role;
     }
 
     public Long getUserId() {
@@ -46,7 +46,7 @@ public abstract class UserJpaEntity {
         return name;
     }
 
-    public UserType getUserType() {
-        return userType;
+    public Role getRole() {
+        return role;
     }
 }
