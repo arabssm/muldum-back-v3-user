@@ -53,7 +53,12 @@ public class GoogleOAuthAdapter implements GoogleOAuthPort {
             return getUserEmail(accessToken);
 
         } catch (IOException e) {
-            throw new InvalidAuthorizationCodeException("인증 코드를 찾을 수 없습니다", e);
+            String errorMessage = String.format(
+                "Google OAuth 토큰 교환 실패 - redirect_uri: %s, error: %s",
+                redirectUri,
+                e.getMessage()
+            );
+            throw new InvalidAuthorizationCodeException(errorMessage, e);
         }
     }
 
