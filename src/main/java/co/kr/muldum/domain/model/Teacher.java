@@ -3,7 +3,7 @@ package co.kr.muldum.domain.model;
 public class Teacher extends User {
 
     private Teacher(Long userId, String email, String name) {
-        super(userId, email, name, UserType.TEACHER, Role.TEACHER);
+        super(userId, email, name, Role.TEACHER);
     }
 
     public static Teacher create(String email, String name) {
