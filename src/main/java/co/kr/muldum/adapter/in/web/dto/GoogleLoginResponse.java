@@ -3,8 +3,10 @@ package co.kr.muldum.adapter.in.web.dto;
 import co.kr.muldum.application.port.in.response.LoginResponse;
 import co.kr.muldum.domain.model.Role;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Getter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Getter
 public class GoogleLoginResponse {
 
     private final Role role;
