@@ -32,24 +32,4 @@ public class GoogleLoginResponse {
             loginResponse.getAccessToken()
         );
     }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Long getTeamId() {
-        return teamId;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
 }
