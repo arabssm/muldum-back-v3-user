@@ -1,5 +1,8 @@
 package co.kr.muldum.domain.model;
 
+import lombok.Getter;
+
+@Getter
 public abstract class User {
     private final Long userId;
     private final String email;
@@ -29,22 +32,6 @@ public abstract class User {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Role getRole() {
-        return role;
     }
 
     public abstract User withUserId(Long userId);
