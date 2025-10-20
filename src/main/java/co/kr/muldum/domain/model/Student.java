@@ -1,5 +1,8 @@
 package co.kr.muldum.domain.model;
 
+import lombok.Getter;
+
+@Getter
 public class Student extends User {
     private final Long teamId;
 
@@ -14,10 +17,6 @@ public class Student extends User {
 
     public static Student of(Long userId, String email, String name, Long teamId) {
         return new Student(userId, email, name, teamId);
-    }
-
-    public Long getTeamId() {
-        return teamId;
     }
 
     @Override
