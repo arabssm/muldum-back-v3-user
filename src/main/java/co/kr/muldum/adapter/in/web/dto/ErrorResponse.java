@@ -1,5 +1,8 @@
 package co.kr.muldum.adapter.in.web.dto;
 
+import lombok.Getter;
+
+@Getter
 public class ErrorResponse {
 
     private final String errorCode;
@@ -12,13 +15,5 @@ public class ErrorResponse {
 
     public static ErrorResponse of(String errorCode, String message) {
         return new ErrorResponse(errorCode, message);
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public String getMessage() {
-        return message;
     }
 }
