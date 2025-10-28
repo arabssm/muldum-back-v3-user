@@ -34,6 +34,9 @@ dependencies {
     // Dotenv support
     implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
+    // Swagger/OpenAPI
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
