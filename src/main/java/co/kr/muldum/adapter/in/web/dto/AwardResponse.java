@@ -21,7 +21,7 @@ public class AwardResponse {
 
     public static AwardResponse from(Award award) {
         return new AwardResponse(
-                award.getAwardType(),
+                award.getAwardType().getDisplayName(),
                 award.getGivenAt()
         );
     }

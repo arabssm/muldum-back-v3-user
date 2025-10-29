@@ -9,10 +9,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Award {
     private final Long awardId;
-    private final String awardType;
+    private final AwardType awardType;
     private final LocalDate givenAt;
 
-    public static Award of(Long awardId, String awardType, LocalDate givenAt) {
+    public static Award of(Long awardId, AwardType awardType, LocalDate givenAt) {
         return new Award(awardId, awardType, givenAt);
     }
 }
