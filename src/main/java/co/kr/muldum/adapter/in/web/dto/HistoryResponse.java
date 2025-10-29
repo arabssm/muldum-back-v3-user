@@ -34,7 +34,7 @@ public class HistoryResponse {
     public static HistoryResponse from(History history) {
         List<AwardResponse> awardResponses = history.getAwards().stream()
                 .map(AwardResponse::from)
-                .collect(Collectors.toList());
+                .toList();
 
         return new HistoryResponse(
                 history.getId(),
