@@ -1,9 +1,7 @@
 package co.kr.muldum.application.port.in;
 
-import co.kr.muldum.domain.model.History;
-
-import java.util.List;
+import co.kr.muldum.application.port.in.response.HistoryListResponse;
 
 public interface GetHistoryUseCase {
-    List<History> getHistoryList(Integer generation);
+    HistoryListResponse getHistoryList(Integer generation);
 }

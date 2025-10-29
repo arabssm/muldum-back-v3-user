@@ -1,6 +1,7 @@
 package co.kr.muldum.application.service;
 
 import co.kr.muldum.application.port.in.GetHistoryUseCase;
+import co.kr.muldum.application.port.in.response.HistoryListResponse;
 import co.kr.muldum.application.port.out.LoadHistoryPort;
 import co.kr.muldum.domain.exception.HistoryNotFoundException;
 import co.kr.muldum.domain.exception.InvalidGenerationException;
@@ -21,7 +22,7 @@ public class HistoryQueryService implements GetHistoryUseCase {
     }
 
     @Override
-    public List<History> getHistoryList(Integer generation) {
+    public HistoryListResponse getHistoryList(Integer generation) {
         // generation이 명시적으로 제공된 경우
         if (generation != null) {
             if (generation <= 0) {
@@ -32,15 +33,16 @@ public class HistoryQueryService implements GetHistoryUseCase {
             if (historyList.isEmpty()) {
                 throw new HistoryNotFoundException(generation);
             }
-            return historyList;
+            return HistoryListResponse.from(historyList);
         }
 
         // generation이 제공되지 않은 경우 - 최신 세대 조회
         Integer maxGeneration = loadHistoryPort.findMaxGeneration();
         if (maxGeneration == null) {
-            return List.of();
+            return HistoryListResponse.from(List.of());
         }
 
-        return loadHistoryPort.findByGeneration(maxGeneration);
+        List<History> historyList = loadHistoryPort.findByGeneration(maxGeneration);
+        return HistoryListResponse.from(historyList);
     }
 }

@@ -2,7 +2,7 @@ package co.kr.muldum.adapter.in.web;
 
 import co.kr.muldum.adapter.in.web.dto.HistoryResponse;
 import co.kr.muldum.application.port.in.GetHistoryUseCase;
-import co.kr.muldum.domain.model.History;
+import co.kr.muldum.application.port.in.response.HistoryListResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -45,9 +45,9 @@ public class HistoryController {
     public ResponseEntity<List<HistoryResponse>> getHistoryList(
             @Parameter(description = "조회할 세대 번호 (양의 정수, 미입력 시 최신 세대)")
             @RequestParam(required = false) Integer generation) {
-        List<History> historyList = getHistoryUseCase.getHistoryList(generation);
+        HistoryListResponse historyListResponse = getHistoryUseCase.getHistoryList(generation);
 
-        List<HistoryResponse> responses = historyList.stream()
+        List<HistoryResponse> responses = historyListResponse.getHistories().stream()
                 .map(HistoryResponse::from)
                 .collect(Collectors.toList());
 
