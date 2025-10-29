@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Tag(name = "History", description = "전공동아리 역사 관리 API")
+@Tag(name = "Histories", description = "전공동아리 역사 관리 API")
 @RestController
 @RequestMapping("/ara/history")
 public class HistoryController {
