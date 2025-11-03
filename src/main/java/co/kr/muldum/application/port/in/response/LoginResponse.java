@@ -14,11 +14,7 @@ public class LoginResponse {
     private final Long teamId;
     private final String accessToken;
 
-    public static LoginResponse ofStudent(Long userId, String name, Long teamId, String accessToken) {
-        return new LoginResponse(Role.STUDENT, userId, name, teamId, accessToken);
-    }
-
-    public static LoginResponse ofTeacher(Long userId, String name, String accessToken) {
-        return new LoginResponse(Role.TEACHER, userId, name, null, accessToken);
+    public static LoginResponse of(Long userId, String name, Role role, Long teamId, String accessToken) {
+        return new LoginResponse(role, userId, name, teamId, accessToken);
     }
 }
