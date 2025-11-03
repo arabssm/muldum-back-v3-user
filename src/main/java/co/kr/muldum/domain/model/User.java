@@ -3,20 +3,34 @@ package co.kr.muldum.domain.model;
 import lombok.Getter;
 
 @Getter
-public abstract class User {
-    private final Long userId;
-    private final String email;
+public class User {
+    private final Long id;
     private final String name;
-    private final Role role;
+    private final Integer enrolledAt;
+    private final String email;
+    private final Integer classNo;
+    private final Integer grade;
+    private final Role userRole;
+    private final Long teamId; // Member 테이블에서 조회한 값
 
-    protected User(Long userId, String email, String name, Role role) {
+    private User(Long id, String name, Integer enrolledAt, String email,
+                Integer classNo, Integer grade, Role userRole, Long teamId) {
         validateEmail(email);
         validateName(name);
 
-        this.userId = userId;
-        this.email = email;
+        this.id = id;
         this.name = name;
-        this.role = role;
+        this.enrolledAt = enrolledAt;
+        this.email = email;
+        this.classNo = classNo;
+        this.grade = grade;
+        this.userRole = userRole;
+        this.teamId = teamId;
+    }
+
+    public static User of(Long id, String name, Integer enrolledAt, String email,
+                          Integer classNo, Integer grade, Role userRole, Long teamId) {
+        return new User(id, name, enrolledAt, email, classNo, grade, userRole, teamId);
     }
 
     private void validateEmail(String email) {
@@ -33,6 +47,4 @@ public abstract class User {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
     }
-
-    public abstract User withUserId(Long userId);
 }
