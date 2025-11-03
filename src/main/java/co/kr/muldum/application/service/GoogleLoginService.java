@@ -7,15 +7,18 @@ import co.kr.muldum.application.port.out.GoogleOAuthPort;
 import co.kr.muldum.application.port.out.JwtPort;
 import co.kr.muldum.application.port.out.LoadUserPort;
 import co.kr.muldum.domain.exception.UnregisteredUserException;
-import co.kr.muldum.domain.model.Student;
-import co.kr.muldum.domain.model.Teacher;
 import co.kr.muldum.domain.model.User;
+import java.util.Locale;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
 public class GoogleLoginService implements GoogleLoginUseCase {
+
+    private static final Logger log = LoggerFactory.getLogger(GoogleLoginService.class);
 
     private final GoogleOAuthPort googleOAuthPort;
     private final LoadUserPort loadUserPort;
@@ -30,32 +33,36 @@ public class GoogleLoginService implements GoogleLoginUseCase {
     @Override
     public LoginResponse login(GoogleLoginCommand command) {
 
-        String email = googleOAuthPort.getEmailFromAuthCode(command.getAuthorizationCode());
+        String emailFromProvider = googleOAuthPort.getEmailFromAuthCode(command.getAuthorizationCode());
 
-        User user = loadUserPort.findByEmail(email)
-                .orElseThrow(() -> new UnregisteredUserException(email));
+        String normalizedEmail = normalizeEmail(emailFromProvider);
 
-        String accessToken = jwtPort.generateAccessToken(
-                user.getUserId(),
-                user.getEmail(),
-                user.getRole().getValue()
-        );
-
-        if (user instanceof Student student) {
-            return LoginResponse.ofStudent(
-                    student.getUserId(),
-                    student.getName(),
-                    student.getTeamId(),
-                    accessToken
-            );
-        } else if (user instanceof Teacher teacher) {
-            return LoginResponse.ofTeacher(
-                    teacher.getUserId(),
-                    teacher.getName(),
-                    accessToken
-            );
+        if (normalizedEmail == null || normalizedEmail.isEmpty()) {
+            throw new UnregisteredUserException(emailFromProvider);
         }
 
-        throw new IllegalStateException("Unknown user type: " + user.getClass().getName());
+        User user = loadUserPort.findByEmail(normalizedEmail)
+                .orElseThrow(() -> new UnregisteredUserException(normalizedEmail));
+
+        String accessToken = jwtPort.generateAccessToken(
+                user.getId(),
+                user.getEmail(),
+                user.getUserRole().getValue()
+        );
+
+        return LoginResponse.of(
+                user.getId(),
+                user.getName(),
+                user.getUserRole(),
+                user.getTeamId(),
+                accessToken
+        );
+    }
+
+    private String normalizeEmail(String email) {
+        if (email == null) {
+            return null;
+        }
+        return email.trim().toLowerCase(Locale.ROOT);
     }
 }
