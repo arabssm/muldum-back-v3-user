@@ -75,6 +75,7 @@ public class GoogleLoginController {
             response.put("userId", loginResponse.getUserId());
             response.put("name", loginResponse.getName());
             response.put("accessToken", loginResponse.getAccessToken());
+            response.put("refreshToken", loginResponse.getRefreshToken());
             if (loginResponse.getTeamId() != null) {
                 response.put("teamId", loginResponse.getTeamId());
             }
