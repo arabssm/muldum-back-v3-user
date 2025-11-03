@@ -6,7 +6,10 @@ import co.kr.muldum.application.port.in.response.LoginResponse;
 import co.kr.muldum.application.port.out.GoogleOAuthPort;
 import co.kr.muldum.application.port.out.JwtPort;
 import co.kr.muldum.application.port.out.LoadUserPort;
+import co.kr.muldum.application.port.out.RefreshTokenPort;
+import co.kr.muldum.application.port.out.SaveRefreshTokenPort;
 import co.kr.muldum.domain.exception.UnregisteredUserException;
+import co.kr.muldum.domain.model.RefreshToken;
 import co.kr.muldum.domain.model.User;
 import java.util.Locale;
 import org.slf4j.Logger;
@@ -23,14 +26,24 @@ public class GoogleLoginService implements GoogleLoginUseCase {
     private final GoogleOAuthPort googleOAuthPort;
     private final LoadUserPort loadUserPort;
     private final JwtPort jwtPort;
+    private final RefreshTokenPort refreshTokenPort;
+    private final SaveRefreshTokenPort saveRefreshTokenPort;
 
-    public GoogleLoginService(GoogleOAuthPort googleOAuthPort, LoadUserPort loadUserPort, JwtPort jwtPort) {
+    public GoogleLoginService(
+            GoogleOAuthPort googleOAuthPort,
+            LoadUserPort loadUserPort,
+            JwtPort jwtPort,
+            RefreshTokenPort refreshTokenPort,
+            SaveRefreshTokenPort saveRefreshTokenPort) {
         this.googleOAuthPort = googleOAuthPort;
         this.loadUserPort = loadUserPort;
         this.jwtPort = jwtPort;
+        this.refreshTokenPort = refreshTokenPort;
+        this.saveRefreshTokenPort = saveRefreshTokenPort;
     }
 
     @Override
+    @Transactional
     public LoginResponse login(GoogleLoginCommand command) {
 
         String emailFromProvider = googleOAuthPort.getEmailFromAuthCode(command.getAuthorizationCode());
@@ -50,12 +63,16 @@ public class GoogleLoginService implements GoogleLoginUseCase {
                 user.getUserRole().getValue()
         );
 
+        RefreshToken refreshToken = refreshTokenPort.generateRefreshToken(user.getId());
+        saveRefreshTokenPort.save(refreshToken);
+
         return LoginResponse.of(
                 user.getId(),
                 user.getName(),
                 user.getUserRole(),
                 user.getTeamId(),
-                accessToken
+                accessToken,
+                refreshToken.getToken()
         );
     }
 
