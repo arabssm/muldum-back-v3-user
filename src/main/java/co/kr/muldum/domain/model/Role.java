@@ -1,8 +1,7 @@
 package co.kr.muldum.domain.model;
 
 public enum Role {
-    STUDENT("student"),
-    TEACHER("teacher");
+    MENTO("mento");
 
     private final String value;
 
