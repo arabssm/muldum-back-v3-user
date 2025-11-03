@@ -4,49 +4,72 @@ import co.kr.muldum.domain.model.Role;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type")
-public abstract class UserJpaEntity {
+@Table(name = "\"user\"")
+public class UserJpaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "id")
+    private Long id;
+
+    @Column(nullable = false, length = 4)
+    private String name;
+
+    @Column(name = "enrolled_at", nullable = false)
+    private Integer enrolledAt;
 
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(name = "class_no", nullable = false)
+    private Integer classNo;
+
     @Column(nullable = false)
-    private String name;
+    private Integer grade;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_type", insertable = false, updatable = false)
-    private Role role;
+    @Column(name = "user_role", nullable = false)
+    private Role userRole;
 
     protected UserJpaEntity() {
     }
 
-    protected UserJpaEntity(Long userId, String email, String name, Role role) {
-        this.userId = userId;
-        this.email = email;
+    public UserJpaEntity(Long id, String name, Integer enrolledAt, String email,
+                         Integer classNo, Integer grade, Role userRole) {
+        this.id = id;
         this.name = name;
-        this.role = role;
+        this.enrolledAt = enrolledAt;
+        this.email = email;
+        this.classNo = classNo;
+        this.grade = grade;
+        this.userRole = userRole;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public String getEmail() {
-        return email;
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public Role getRole() {
-        return role;
+    public Integer getEnrolledAt() {
+        return enrolledAt;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Integer getClassNo() {
+        return classNo;
+    }
+
+    public Integer getGrade() {
+        return grade;
+    }
+
+    public Role getUserRole() {
+        return userRole;
     }
 }
