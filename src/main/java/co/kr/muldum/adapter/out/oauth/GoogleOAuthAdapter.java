@@ -37,7 +37,6 @@ public class GoogleOAuthAdapter implements GoogleOAuthPort {
     @Override
     public String getEmailFromAuthCode(String authorizationCode) {
         try {
-            // Exchange authorization code for access token
             GoogleTokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(
                     new NetHttpTransport(),
                     new GsonFactory(),
@@ -49,7 +48,6 @@ public class GoogleOAuthAdapter implements GoogleOAuthPort {
 
             String accessToken = tokenResponse.getAccessToken();
 
-            // Get user info from Google
             return getUserEmail(accessToken);
 
         } catch (IOException e) {
