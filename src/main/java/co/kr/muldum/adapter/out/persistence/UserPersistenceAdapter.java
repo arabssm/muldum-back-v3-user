@@ -42,4 +42,26 @@ public class UserPersistenceAdapter implements LoadUserPort {
             throw e;
         }
     }
+
+    @Override
+    public Optional<User> findById(Long id) {
+        try {
+            Optional<UserJpaEntity> userEntity = userJpaRepository.findById(id);
+
+            if (userEntity.isEmpty()) {
+                return Optional.empty();
+            }
+
+            UserJpaEntity entity = userEntity.get();
+
+            Long teamId = memberJpaRepository.findByUserId(entity.getId())
+                    .map(MemberJpaEntity::getTeamId)
+                    .orElse(null);
+
+            return Optional.of(UserMapper.toDomain(entity, teamId));
+        } catch (Exception e) {
+            log.error("DB 조회 중 예외 발생!", e);
+            throw e;
+        }
+    }
 }
