@@ -47,4 +47,10 @@ public class RefreshTokenPersistenceAdapter implements SaveRefreshTokenPort, Loa
     public void deleteByUserId(Long userId) {
         refreshTokenJpaRepository.deleteByUserId(userId);
     }
+
+    @Override
+    @Transactional
+    public void deleteByToken(String token) {
+        refreshTokenJpaRepository.deleteByToken(token);
+    }
 }
