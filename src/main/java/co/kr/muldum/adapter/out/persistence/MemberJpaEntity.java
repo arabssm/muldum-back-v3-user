@@ -2,6 +2,8 @@ package co.kr.muldum.adapter.out.persistence;
 
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "\"member\"")
 public class MemberJpaEntity {
@@ -11,7 +13,7 @@ public class MemberJpaEntity {
     private Long id;
 
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private UUID userId;
 
     @Column(name = "team_id", nullable = false)
     private Long teamId;
@@ -19,7 +21,7 @@ public class MemberJpaEntity {
     protected MemberJpaEntity() {
     }
 
-    public MemberJpaEntity(Long id, Long userId, Long teamId) {
+    public MemberJpaEntity(Long id, UUID userId, Long teamId) {
         this.id = id;
         this.userId = userId;
         this.teamId = teamId;
@@ -29,7 +31,7 @@ public class MemberJpaEntity {
         return id;
     }
 
-    public Long getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
