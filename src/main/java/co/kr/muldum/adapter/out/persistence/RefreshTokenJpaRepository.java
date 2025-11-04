@@ -7,16 +7,17 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface RefreshTokenJpaRepository extends JpaRepository<RefreshTokenJpaEntity, Long> {
 
     Optional<RefreshTokenJpaEntity> findByToken(String token);
 
-    Optional<RefreshTokenJpaEntity> findByUserId(Long userId);
+    Optional<RefreshTokenJpaEntity> findByUserId(UUID userId);
 
     @Modifying
     @Query("DELETE FROM RefreshTokenJpaEntity r WHERE r.userId = :userId")
-    void deleteByUserId(@Param("userId") Long userId);
+    void deleteByUserId(@Param("userId") UUID userId);
 
     @Modifying
     @Query("DELETE FROM RefreshTokenJpaEntity r WHERE r.token = :token")

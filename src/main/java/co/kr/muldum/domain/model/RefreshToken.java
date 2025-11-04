@@ -3,14 +3,15 @@ package co.kr.muldum.domain.model;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 public class RefreshToken {
     private final String token;
-    private final Long userId;
+    private final UUID userId;
     private final LocalDateTime expiryDate;
 
-    private RefreshToken(String token, Long userId, LocalDateTime expiryDate) {
+    private RefreshToken(String token, UUID userId, LocalDateTime expiryDate) {
         validateToken(token);
         validateUserId(userId);
         validateExpiryDate(expiryDate);
@@ -20,7 +21,7 @@ public class RefreshToken {
         this.expiryDate = expiryDate;
     }
 
-    public static RefreshToken of(String token, Long userId, LocalDateTime expiryDate) {
+    public static RefreshToken of(String token, UUID userId, LocalDateTime expiryDate) {
         return new RefreshToken(token, userId, expiryDate);
     }
 
@@ -30,9 +31,9 @@ public class RefreshToken {
         }
     }
 
-    private void validateUserId(Long userId) {
-        if (userId == null || userId <= 0) {
-            throw new IllegalArgumentException("User ID must be positive");
+    private void validateUserId(UUID userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
         }
     }
 

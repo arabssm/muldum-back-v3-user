@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class RefreshTokenPersistenceAdapter implements SaveRefreshTokenPort, LoadRefreshTokenPort, DeleteRefreshTokenPort {
@@ -37,14 +38,14 @@ public class RefreshTokenPersistenceAdapter implements SaveRefreshTokenPort, Loa
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<RefreshToken> findByUserId(Long userId) {
+    public Optional<RefreshToken> findByUserId(UUID userId) {
         return refreshTokenJpaRepository.findByUserId(userId)
                 .map(RefreshTokenMapper::toDomain);
     }
 
     @Override
     @Transactional
-    public void deleteByUserId(Long userId) {
+    public void deleteByUserId(UUID userId) {
         refreshTokenJpaRepository.deleteByUserId(userId);
     }
 

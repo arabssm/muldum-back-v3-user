@@ -2,9 +2,11 @@ package co.kr.muldum.domain.model;
 
 import lombok.Getter;
 
+import java.util.UUID;
+
 @Getter
 public class User {
-    private final Long id;
+    private final UUID id;
     private final String name;
     private final Integer enrolledAt;
     private final String email;
@@ -13,7 +15,7 @@ public class User {
     private final Role userRole;
     private final Long teamId; // Member 테이블에서 조회한 값
 
-    private User(Long id, String name, Integer enrolledAt, String email,
+    private User(UUID id, String name, Integer enrolledAt, String email,
                 Integer classNo, Integer grade, Role userRole, Long teamId) {
         validateEmail(email);
         validateName(name);
@@ -28,7 +30,7 @@ public class User {
         this.teamId = teamId;
     }
 
-    public static User of(Long id, String name, Integer enrolledAt, String email,
+    public static User of(UUID id, String name, Integer enrolledAt, String email,
                           Integer classNo, Integer grade, Role userRole, Long teamId) {
         return new User(id, name, enrolledAt, email, classNo, grade, userRole, teamId);
     }

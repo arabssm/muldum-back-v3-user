@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "refresh_token")
@@ -21,7 +22,7 @@ public class RefreshTokenJpaEntity {
     private String token;
 
     @Column(nullable = false, name = "user_id")
-    private Long userId;
+    private UUID userId;
 
     @Column(nullable = false, name = "expiry_date")
     private LocalDateTime expiryDate;
@@ -29,14 +30,14 @@ public class RefreshTokenJpaEntity {
     @Column(nullable = false, name = "created_at")
     private LocalDateTime createdAt;
 
-    private RefreshTokenJpaEntity(String token, Long userId, LocalDateTime expiryDate) {
+    private RefreshTokenJpaEntity(String token, UUID userId, LocalDateTime expiryDate) {
         this.token = token;
         this.userId = userId;
         this.expiryDate = expiryDate;
         this.createdAt = LocalDateTime.now();
     }
 
-    public static RefreshTokenJpaEntity of(String token, Long userId, LocalDateTime expiryDate) {
+    public static RefreshTokenJpaEntity of(String token, UUID userId, LocalDateTime expiryDate) {
         return new RefreshTokenJpaEntity(token, userId, expiryDate);
     }
 

@@ -18,7 +18,7 @@ public class RefreshTokenProvider implements RefreshTokenPort {
     }
 
     @Override
-    public RefreshToken generateRefreshToken(Long userId) {
+    public RefreshToken generateRefreshToken(UUID userId) {
         String token = UUID.randomUUID().toString();
         LocalDateTime expiryDate = LocalDateTime.now().plusSeconds(refreshTokenExpiration / 1000);
 

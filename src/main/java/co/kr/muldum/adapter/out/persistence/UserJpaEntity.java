@@ -3,14 +3,16 @@ package co.kr.muldum.adapter.out.persistence;
 import co.kr.muldum.domain.model.Role;
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "\"user\"")
 public class UserJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
+    private UUID id;
 
     @Column(nullable = false, length = 4)
     private String name;
@@ -34,7 +36,7 @@ public class UserJpaEntity {
     protected UserJpaEntity() {
     }
 
-    public UserJpaEntity(Long id, String name, Integer enrolledAt, String email,
+    public UserJpaEntity(UUID id, String name, Integer enrolledAt, String email,
                          Integer classNo, Integer grade, Role userRole) {
         this.id = id;
         this.name = name;
@@ -45,7 +47,7 @@ public class UserJpaEntity {
         this.userRole = userRole;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 

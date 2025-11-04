@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtProvider implements JwtPort {
@@ -34,12 +35,12 @@ public class JwtProvider implements JwtPort {
     }
 
     @Override
-    public String generateAccessToken(Long userId, String email, String role) {
+    public String generateAccessToken(UUID userId, String email, String role) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenExpiration);
 
         return Jwts.builder()
-                .subject(String.valueOf(userId))
+                .subject(userId.toString())
                 .claim("email", email)
                 .claim("role", role)
                 .issuedAt(now)

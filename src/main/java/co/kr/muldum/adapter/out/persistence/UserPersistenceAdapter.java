@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class UserPersistenceAdapter implements LoadUserPort {
@@ -44,7 +45,7 @@ public class UserPersistenceAdapter implements LoadUserPort {
     }
 
     @Override
-    public Optional<User> findById(Long id) {
+    public Optional<User> findById(UUID id) {
         try {
             Optional<UserJpaEntity> userEntity = userJpaRepository.findById(id);
 

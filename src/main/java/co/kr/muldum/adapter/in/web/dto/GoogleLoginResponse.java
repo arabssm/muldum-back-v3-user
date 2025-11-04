@@ -5,18 +5,20 @@ import co.kr.muldum.domain.model.Role;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 
+import java.util.UUID;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 public class GoogleLoginResponse {
 
     private final Role role;
-    private final Long userId;
+    private final UUID userId;
     private final String name;
     private final Long teamId;
     private final String accessToken;
     private final String refreshToken;
 
-    private GoogleLoginResponse(Role role, Long userId, String name, Long teamId, String accessToken, String refreshToken) {
+    private GoogleLoginResponse(Role role, UUID userId, String name, Long teamId, String accessToken, String refreshToken) {
         this.role = role;
         this.userId = userId;
         this.name = name;
