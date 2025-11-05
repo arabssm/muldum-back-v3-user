@@ -1,4 +1,4 @@
-package co.kr.muldum.adapter.in.web;
+package co.kr.muldum.infrastructure.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
