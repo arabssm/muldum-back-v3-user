@@ -1,31 +1,41 @@
 package co.kr.muldum.domain.validator;
 
 import co.kr.muldum.domain.exception.RefreshTokenValidationException;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
 
-public class RefreshTokenValidator {
+@Component
+public class RefreshTokenValidator implements DomainValidator<RefreshTokenValidator.Target> {
 
-    private RefreshTokenValidator() {
-        // Utility class - prevent instantiation
+    @Override
+    public void validate(Target target) {
+        validateToken(target.token());
+        validateUserId(target.userId());
+        validateExpiryDate(target.expiryDate());
     }
 
-    public static void validateToken(String token) {
-        if (token == null || token.trim().isEmpty()) {
-            throw new RefreshTokenValidationException("Refresh token cannot be null or empty");
+    public void validateToken(String token) {
+        if (token == null || token.isBlank()) {
+            throw new RefreshTokenValidationException("Refresh token cannot be null or empty",
+                    Map.of("field", "token"));
         }
     }
 
-    public static void validateUserId(UUID userId) {
+    public void validateUserId(UUID userId) {
         if (userId == null) {
-            throw new RefreshTokenValidationException("User ID cannot be null");
+            throw new RefreshTokenValidationException("User ID cannot be null", Map.of("field", "userId"));
         }
     }
 
-    public static void validateExpiryDate(LocalDateTime expiryDate) {
+    public void validateExpiryDate(LocalDateTime expiryDate) {
         if (expiryDate == null) {
-            throw new RefreshTokenValidationException("Expiry date cannot be null");
+            throw new RefreshTokenValidationException("Expiry date cannot be null", Map.of("field", "expiryDate"));
         }
+    }
+
+    public record Target(String token, UUID userId, LocalDateTime expiryDate) {
     }
 }
