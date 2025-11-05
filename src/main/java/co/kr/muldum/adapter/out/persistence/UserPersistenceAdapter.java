@@ -16,10 +16,14 @@ public class UserPersistenceAdapter implements LoadUserPort {
 
     private final UserJpaRepository userJpaRepository;
     private final MemberJpaRepository memberJpaRepository;
+    private final UserMapper userMapper;
 
-    public UserPersistenceAdapter(UserJpaRepository userJpaRepository, MemberJpaRepository memberJpaRepository) {
+    public UserPersistenceAdapter(UserJpaRepository userJpaRepository,
+                                  MemberJpaRepository memberJpaRepository,
+                                  UserMapper userMapper) {
         this.userJpaRepository = userJpaRepository;
         this.memberJpaRepository = memberJpaRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -37,7 +41,7 @@ public class UserPersistenceAdapter implements LoadUserPort {
                     .map(MemberJpaEntity::getTeamId)
                     .orElse(null);
 
-            return Optional.of(UserMapper.toDomain(entity, teamId));
+            return Optional.of(userMapper.toDomain(entity, teamId));
         } catch (Exception e) {
             log.error("DB 조회 중 예외 발생!", e);
             throw e;
@@ -59,7 +63,7 @@ public class UserPersistenceAdapter implements LoadUserPort {
                     .map(MemberJpaEntity::getTeamId)
                     .orElse(null);
 
-            return Optional.of(UserMapper.toDomain(entity, teamId));
+            return Optional.of(userMapper.toDomain(entity, teamId));
         } catch (Exception e) {
             log.error("DB 조회 중 예외 발생!", e);
             throw e;
