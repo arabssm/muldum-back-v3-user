@@ -1,5 +1,6 @@
 package co.kr.muldum.domain.model;
 
+import co.kr.muldum.domain.exception.InvalidRefreshTokenException;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -45,5 +46,17 @@ public class RefreshToken {
 
     public boolean isExpired() {
         return LocalDateTime.now().isAfter(expiryDate);
+    }
+
+    /**
+     * 토큰이 만료되지 않았는지 검증합니다.
+     * 도메인 비즈니스 규칙: 만료된 토큰은 사용할 수 없음
+     *
+     * @throws InvalidRefreshTokenException 토큰이 만료된 경우
+     */
+    public void validateNotExpired() {
+        if (isExpired()) {
+            throw new InvalidRefreshTokenException("유효하지 않은 리프레시 토큰입니다");
+        }
     }
 }
