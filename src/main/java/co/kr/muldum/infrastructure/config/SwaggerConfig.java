@@ -11,17 +11,23 @@ import java.util.List;
 @Configuration
 public class SwaggerConfig {
 
+    private final SwaggerProperties swaggerProperties;
+
+    public SwaggerConfig(SwaggerProperties swaggerProperties) {
+        this.swaggerProperties = swaggerProperties;
+    }
+
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Muldum API")
-                        .description("Muldum 프로젝트 API 명세서")
-                        .version("v1.0.0"))
+                        .title(swaggerProperties.getTitle())
+                        .description(swaggerProperties.getDescription())
+                        .version(swaggerProperties.getVersion()))
                 .servers(List.of(
                         new Server()
-                                .url("http://localhost:8080")
-                                .description("개발 서버")
+                                .url(swaggerProperties.getServer().getUrl())
+                                .description(swaggerProperties.getServer().getDescription())
                 ));
     }
 }
