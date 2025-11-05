@@ -1,4 +1,4 @@
-package co.kr.muldum.adapter.in.web;
+package co.kr.muldum.infrastructure.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
