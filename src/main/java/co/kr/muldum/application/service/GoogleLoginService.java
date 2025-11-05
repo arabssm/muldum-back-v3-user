@@ -11,7 +11,7 @@ import co.kr.muldum.application.port.out.SaveRefreshTokenPort;
 import co.kr.muldum.domain.exception.UnregisteredUserException;
 import co.kr.muldum.domain.model.RefreshToken;
 import co.kr.muldum.domain.model.User;
-import java.util.Locale;
+import co.kr.muldum.domain.service.EmailNormalizationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -45,24 +45,28 @@ public class GoogleLoginService implements GoogleLoginUseCase {
     @Override
     @Transactional
     public LoginResponse login(GoogleLoginCommand command) {
-
+        // OAuth 인증 코드로 이메일 획득
         String emailFromProvider = googleOAuthPort.getEmailFromAuthCode(command.getAuthorizationCode());
 
-        String normalizedEmail = normalizeEmail(emailFromProvider);
+        // 도메인 서비스를 통한 이메일 정규화
+        String normalizedEmail = EmailNormalizationService.normalize(emailFromProvider);
 
         if (normalizedEmail == null || normalizedEmail.isEmpty()) {
             throw new UnregisteredUserException(emailFromProvider);
         }
 
+        // 사용자 조회
         User user = loadUserPort.findByEmail(normalizedEmail)
                 .orElseThrow(() -> new UnregisteredUserException(normalizedEmail));
 
+        // JWT 토큰 생성
         String accessToken = jwtPort.generateAccessToken(
                 user.getId(),
                 user.getEmail(),
                 user.getUserRole().getValue()
         );
 
+        // 리프레시 토큰 생성 및 저장
         RefreshToken refreshToken = refreshTokenPort.generateRefreshToken(user.getId());
         saveRefreshTokenPort.save(refreshToken);
 
@@ -74,12 +78,5 @@ public class GoogleLoginService implements GoogleLoginUseCase {
                 accessToken,
                 refreshToken.getToken()
         );
-    }
-
-    private String normalizeEmail(String email) {
-        if (email == null) {
-            return null;
-        }
-        return email.trim().toLowerCase(Locale.ROOT);
     }
 }
