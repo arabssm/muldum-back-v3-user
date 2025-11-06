@@ -1,18 +1,29 @@
 package co.kr.muldum.adapter.out.persistence;
 
 import co.kr.muldum.domain.model.RefreshToken;
+import org.springframework.stereotype.Component;
 
+import java.time.Clock;
+
+@Component
 public class RefreshTokenMapper {
 
-    public static RefreshToken toDomain(RefreshTokenJpaEntity entity) {
-        return RefreshToken.of(
+    private final Clock clock;
+
+    public RefreshTokenMapper(Clock clock) {
+        this.clock = clock;
+    }
+
+    public RefreshToken toDomain(RefreshTokenJpaEntity entity) {
+        return RefreshToken.from(
                 entity.getToken(),
                 entity.getUserId(),
-                entity.getExpiryDate()
+                entity.getExpiryDate(),
+                clock
         );
     }
 
-    public static RefreshTokenJpaEntity toEntity(RefreshToken refreshToken) {
+    public RefreshTokenJpaEntity toEntity(RefreshToken refreshToken) {
         return RefreshTokenJpaEntity.of(
                 refreshToken.getToken(),
                 refreshToken.getUserId(),
