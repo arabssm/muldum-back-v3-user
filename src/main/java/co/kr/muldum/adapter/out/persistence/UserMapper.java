@@ -7,6 +7,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserMapper {
 
+    public static User toDomain(UserJpaEntity entity) {
+        Long teamId = null;
+        if (entity.getMember() != null) {
+            teamId = entity.getMember().getTeamId();
+        }
+
+        return User.of(
+                entity.getId(),
+                entity.getName(),
+                entity.getEnrolledAt(),
+                entity.getEmail(),
+                entity.getClassNo(),
+                entity.getGrade(),
+                entity.getUserRole(),
+                teamId
+        );
+    }
+
     public static User toDomain(UserJpaEntity entity, Long teamId) {
         return User.of(
                 entity.getId(),
