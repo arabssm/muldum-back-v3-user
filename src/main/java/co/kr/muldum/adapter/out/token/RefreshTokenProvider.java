@@ -2,6 +2,7 @@ package co.kr.muldum.adapter.out.token;
 
 import co.kr.muldum.application.port.out.RefreshTokenPort;
 import co.kr.muldum.domain.model.RefreshToken;
+import co.kr.muldum.domain.model.RefreshTokenFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +13,12 @@ import java.util.UUID;
 public class RefreshTokenProvider implements RefreshTokenPort {
 
     private final long refreshTokenExpiration;
+    private final RefreshTokenFactory refreshTokenFactory;
 
-    public RefreshTokenProvider(@Value("${jwt.refresh-token-expiration}") long refreshTokenExpiration) {
+    public RefreshTokenProvider(@Value("${jwt.refresh-token-expiration}") long refreshTokenExpiration,
+                                RefreshTokenFactory refreshTokenFactory) {
         this.refreshTokenExpiration = refreshTokenExpiration;
+        this.refreshTokenFactory = refreshTokenFactory;
     }
 
     @Override
@@ -22,6 +26,6 @@ public class RefreshTokenProvider implements RefreshTokenPort {
         String token = UUID.randomUUID().toString();
         LocalDateTime expiryDate = LocalDateTime.now().plusSeconds(refreshTokenExpiration / 1000);
 
-        return RefreshToken.of(token, userId, expiryDate);
+        return refreshTokenFactory.create(new RefreshTokenFactory.RefreshTokenCreateCommand(token, userId, expiryDate));
     }
 }

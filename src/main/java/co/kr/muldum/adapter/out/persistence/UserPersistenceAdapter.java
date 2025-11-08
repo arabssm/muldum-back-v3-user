@@ -15,16 +15,33 @@ public class UserPersistenceAdapter implements LoadUserPort {
     private static final Logger log = LoggerFactory.getLogger(UserPersistenceAdapter.class);
 
     private final UserJpaRepository userJpaRepository;
+    private final MemberJpaRepository memberJpaRepository;
+    private final UserMapper userMapper;
 
-    public UserPersistenceAdapter(UserJpaRepository userJpaRepository) {
+    public UserPersistenceAdapter(UserJpaRepository userJpaRepository,
+                                  MemberJpaRepository memberJpaRepository,
+                                  UserMapper userMapper) {
         this.userJpaRepository = userJpaRepository;
+        this.memberJpaRepository = memberJpaRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
         try {
-            return userJpaRepository.findByEmailIgnoreCaseWithMember(email)
-                    .map(UserMapper::toDomain);
+            Optional<UserJpaEntity> userEntity = userJpaRepository.findByEmailIgnoreCase(email);
+
+            if (userEntity.isEmpty()) {
+                return Optional.empty();
+            }
+
+            UserJpaEntity entity = userEntity.get();
+
+            Long teamId = memberJpaRepository.findByUserId(entity.getId())
+                    .map(MemberJpaEntity::getTeamId)
+                    .orElse(null);
+
+            return Optional.of(userMapper.toDomain(entity, teamId));
         } catch (Exception e) {
             log.error("DB 조회 중 예외 발생!", e);
             throw e;
@@ -34,8 +51,19 @@ public class UserPersistenceAdapter implements LoadUserPort {
     @Override
     public Optional<User> findById(UUID id) {
         try {
-            return userJpaRepository.findByIdWithMember(id)
-                    .map(UserMapper::toDomain);
+            Optional<UserJpaEntity> userEntity = userJpaRepository.findById(id);
+
+            if (userEntity.isEmpty()) {
+                return Optional.empty();
+            }
+
+            UserJpaEntity entity = userEntity.get();
+
+            Long teamId = memberJpaRepository.findByUserId(entity.getId())
+                    .map(MemberJpaEntity::getTeamId)
+                    .orElse(null);
+
+            return Optional.of(userMapper.toDomain(entity, teamId));
         } catch (Exception e) {
             log.error("DB 조회 중 예외 발생!", e);
             throw e;

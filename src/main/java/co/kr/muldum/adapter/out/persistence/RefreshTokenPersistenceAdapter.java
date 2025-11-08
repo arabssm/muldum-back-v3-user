@@ -14,9 +14,12 @@ import java.util.UUID;
 public class RefreshTokenPersistenceAdapter implements SaveRefreshTokenPort, LoadRefreshTokenPort, DeleteRefreshTokenPort {
 
     private final RefreshTokenJpaRepository refreshTokenJpaRepository;
+    private final RefreshTokenMapper refreshTokenMapper;
 
-    public RefreshTokenPersistenceAdapter(RefreshTokenJpaRepository refreshTokenJpaRepository) {
+    public RefreshTokenPersistenceAdapter(RefreshTokenJpaRepository refreshTokenJpaRepository,
+                                          RefreshTokenMapper refreshTokenMapper) {
         this.refreshTokenJpaRepository = refreshTokenJpaRepository;
+        this.refreshTokenMapper = refreshTokenMapper;
     }
 
     @Override
@@ -25,7 +28,7 @@ public class RefreshTokenPersistenceAdapter implements SaveRefreshTokenPort, Loa
         refreshTokenJpaRepository.findByUserId(refreshToken.getUserId())
                 .ifPresent(refreshTokenJpaRepository::delete);
 
-        RefreshTokenJpaEntity entity = RefreshTokenMapper.toEntity(refreshToken);
+        RefreshTokenJpaEntity entity = refreshTokenMapper.toEntity(refreshToken);
         refreshTokenJpaRepository.save(entity);
     }
 
@@ -33,14 +36,14 @@ public class RefreshTokenPersistenceAdapter implements SaveRefreshTokenPort, Loa
     @Transactional(readOnly = true)
     public Optional<RefreshToken> findByToken(String token) {
         return refreshTokenJpaRepository.findByToken(token)
-                .map(RefreshTokenMapper::toDomain);
+                .map(refreshTokenMapper::toDomain);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<RefreshToken> findByUserId(UUID userId) {
         return refreshTokenJpaRepository.findByUserId(userId)
-                .map(RefreshTokenMapper::toDomain);
+                .map(refreshTokenMapper::toDomain);
     }
 
     @Override

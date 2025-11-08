@@ -1,7 +1,7 @@
 package co.kr.muldum.adapter.in.web;
 
 import co.kr.muldum.adapter.in.web.dto.ErrorResponse;
-import co.kr.muldum.domain.exception.BusinessException;
+import co.kr.muldum.domain.exception.GlobalException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,10 +14,10 @@ public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
-        log.error("Business exception occurred: [{}] {}", ex.getErrorCode(), ex.getMessage(), ex);
-        ErrorResponse errorResponse = ErrorResponse.of(ex.getErrorCode(), ex.getMessage());
+    @ExceptionHandler(GlobalException.class)
+    public ResponseEntity<ErrorResponse> handleGlobalException(GlobalException ex) {
+        log.error("Handled global exception [{}]: {}", ex.getErrorCode(), ex.getMessage(), ex);
+        ErrorResponse errorResponse = ErrorResponse.of(ex.getErrorCode(), ex.getMessage(), ex.getDetails());
         return ResponseEntity.status(ex.getHttpStatus()).body(errorResponse);
     }
 
