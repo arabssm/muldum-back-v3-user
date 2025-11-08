@@ -2,6 +2,7 @@ package co.kr.muldum.adapter.out.token;
 
 import co.kr.muldum.application.port.out.RefreshTokenPort;
 import co.kr.muldum.domain.model.RefreshToken;
+import co.kr.muldum.domain.model.RefreshTokenFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

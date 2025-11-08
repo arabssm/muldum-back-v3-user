@@ -4,6 +4,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * 전역 CORS 정책을 등록하는 Web MVC 설정 클래스입니다.
+ */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
@@ -15,7 +18,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // CORS 설정이 있는 경우에만 적용
         if (corsProperties.getAllowedOrigins() != null && !corsProperties.getAllowedOrigins().isEmpty()) {
             registry.addMapping("/**")
                     .allowedOrigins(corsProperties.getAllowedOrigins().toArray(new String[0]))

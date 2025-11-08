@@ -1,19 +1,20 @@
 package co.kr.muldum.adapter.out.persistence;
 
 import co.kr.muldum.domain.model.User;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import co.kr.muldum.domain.model.UserFactory;
+import org.springframework.stereotype.Component;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public class UserMapper {
 
-    public static User toDomain(UserJpaEntity entity) {
-        Long teamId = null;
-        if (entity.getMember() != null) {
-            teamId = entity.getMember().getTeamId();
-        }
+    private final UserFactory userFactory;
 
-        return User.of(
+    public UserMapper(UserFactory userFactory) {
+        this.userFactory = userFactory;
+    }
+
+    public User toDomain(UserJpaEntity entity, Long teamId) {
+        return userFactory.create(new UserFactory.UserCreateCommand(
                 entity.getId(),
                 entity.getName(),
                 entity.getEnrolledAt(),
@@ -22,23 +23,10 @@ public class UserMapper {
                 entity.getGrade(),
                 entity.getUserRole(),
                 teamId
-        );
+        ));
     }
 
-    public static User toDomain(UserJpaEntity entity, Long teamId) {
-        return User.of(
-                entity.getId(),
-                entity.getName(),
-                entity.getEnrolledAt(),
-                entity.getEmail(),
-                entity.getClassNo(),
-                entity.getGrade(),
-                entity.getUserRole(),
-                teamId
-        );
-    }
-
-    public static UserJpaEntity toEntity(User user) {
+    public UserJpaEntity toEntity(User user) {
         return new UserJpaEntity(
                 user.getId(),
                 user.getName(),

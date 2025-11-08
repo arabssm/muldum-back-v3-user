@@ -1,7 +1,7 @@
 package co.kr.muldum.adapter.in.web;
 
 import co.kr.muldum.adapter.in.web.dto.ErrorResponse;
-import co.kr.muldum.domain.exception.BusinessException;
+import co.kr.muldum.domain.exception.GlobalException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
