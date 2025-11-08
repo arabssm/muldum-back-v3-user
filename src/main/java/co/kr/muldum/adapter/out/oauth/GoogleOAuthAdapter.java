@@ -1,7 +1,7 @@
 package co.kr.muldum.adapter.out.oauth;
 
 import co.kr.muldum.application.port.out.GoogleOAuthPort;
-import co.kr.muldum.domain.exception.InvalidAuthorizationCodeException;
+import co.kr.muldum.global.exception.InvalidAuthorizationCodeException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;

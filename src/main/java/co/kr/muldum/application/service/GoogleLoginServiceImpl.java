@@ -8,10 +8,10 @@ import co.kr.muldum.application.port.out.JwtPort;
 import co.kr.muldum.application.port.out.LoadUserPort;
 import co.kr.muldum.application.port.out.RefreshTokenPort;
 import co.kr.muldum.application.port.out.SaveRefreshTokenPort;
-import co.kr.muldum.domain.exception.UnregisteredUserException;
 import co.kr.muldum.domain.model.RefreshToken;
 import co.kr.muldum.domain.model.User;
 import co.kr.muldum.domain.service.EmailNormalizationService;
+import co.kr.muldum.global.exception.UnregisteredUserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,9 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-public class GoogleLoginService implements GoogleLoginUseCase {
+public class GoogleLoginServiceImpl implements GoogleLoginUseCase {
 
-    private static final Logger log = LoggerFactory.getLogger(GoogleLoginService.class);
+    private static final Logger log = LoggerFactory.getLogger(GoogleLoginServiceImpl.class);
 
     private final GoogleOAuthPort googleOAuthPort;
     private final LoadUserPort loadUserPort;
@@ -30,7 +30,7 @@ public class GoogleLoginService implements GoogleLoginUseCase {
     private final SaveRefreshTokenPort saveRefreshTokenPort;
     private final EmailNormalizationService emailNormalizationService;
 
-    public GoogleLoginService(
+    public GoogleLoginServiceImpl(
             GoogleOAuthPort googleOAuthPort,
             LoadUserPort loadUserPort,
             JwtPort jwtPort,
