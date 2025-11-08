@@ -28,18 +28,21 @@ public class GoogleLoginServiceImpl implements GoogleLoginUseCase {
     private final JwtPort jwtPort;
     private final RefreshTokenPort refreshTokenPort;
     private final SaveRefreshTokenPort saveRefreshTokenPort;
+    private final EmailNormalizationService emailNormalizationService;
 
     public GoogleLoginServiceImpl(
             GoogleOAuthPort googleOAuthPort,
             LoadUserPort loadUserPort,
             JwtPort jwtPort,
             RefreshTokenPort refreshTokenPort,
-            SaveRefreshTokenPort saveRefreshTokenPort) {
+            SaveRefreshTokenPort saveRefreshTokenPort,
+            EmailNormalizationService emailNormalizationService) {
         this.googleOAuthPort = googleOAuthPort;
         this.loadUserPort = loadUserPort;
         this.jwtPort = jwtPort;
         this.refreshTokenPort = refreshTokenPort;
         this.saveRefreshTokenPort = saveRefreshTokenPort;
+        this.emailNormalizationService = emailNormalizationService;
     }
 
     @Override
@@ -49,11 +52,7 @@ public class GoogleLoginServiceImpl implements GoogleLoginUseCase {
         String emailFromProvider = googleOAuthPort.getEmailFromAuthCode(command.getAuthorizationCode());
 
         // 도메인 서비스를 통한 이메일 정규화
-        String normalizedEmail = EmailNormalizationService.normalize(emailFromProvider);
-
-        if (normalizedEmail == null || normalizedEmail.isEmpty()) {
-            throw new UnregisteredUserException(emailFromProvider);
-        }
+        String normalizedEmail = emailNormalizationService.normalize(emailFromProvider);
 
         // 사용자 조회
         User user = loadUserPort.findByEmail(normalizedEmail)
