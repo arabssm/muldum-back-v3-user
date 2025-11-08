@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/ara/auth/sup")
+@RequestMapping("/auth/sup")
 public class SuperAdminLogController {
 
     private final GetUserLogsUseCase getUserLogsUseCase;

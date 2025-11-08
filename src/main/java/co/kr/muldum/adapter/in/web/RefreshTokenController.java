@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/ara/auth")
+@RequestMapping("/auth")
 public class RefreshTokenController {
 
     private final RefreshAccessTokenUseCase refreshAccessTokenUseCase;
