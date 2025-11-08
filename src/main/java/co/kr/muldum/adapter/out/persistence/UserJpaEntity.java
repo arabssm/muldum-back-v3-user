@@ -33,6 +33,10 @@ public class UserJpaEntity {
     @Column(name = "user_role", nullable = false)
     private Role userRole;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    private MemberJpaEntity member;
+
     protected UserJpaEntity() {
     }
 
@@ -73,5 +77,9 @@ public class UserJpaEntity {
 
     public Role getUserRole() {
         return userRole;
+    }
+
+    public MemberJpaEntity getMember() {
+        return member;
     }
 }
