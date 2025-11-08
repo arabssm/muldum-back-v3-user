@@ -6,6 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
 import org.springframework.validation.annotation.Validated;
 
+/**
+ * Swagger/OpenAPI 문서화를 위한 메타데이터를 관리하는 프로퍼티 클래스입니다.
+ */
 @Validated
 @ConfigurationProperties(prefix = "swagger")
 public class SwaggerProperties {
@@ -52,6 +55,9 @@ public class SwaggerProperties {
         return (candidate == null || candidate.isBlank()) ? defaultValue : candidate;
     }
 
+    /**
+     * Swagger 서버 정보를 감싸는 중첩 프로퍼티입니다.
+     */
     @Validated
     public static class Server {
         private static final String DEFAULT_URL = "http://localhost:8080";
