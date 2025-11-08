@@ -31,16 +31,18 @@ public class RefreshAccessTokenService implements RefreshAccessTokenUseCase {
 
     @Override
     public RefreshTokenResponse refresh(RefreshTokenCommand command) {
+        // 리프레시 토큰 조회
         RefreshToken refreshToken = loadRefreshTokenPort.findByToken(command.getRefreshToken())
                 .orElseThrow(() -> new InvalidRefreshTokenException("유효하지 않은 리프레시 토큰입니다"));
 
-        if (refreshToken.isExpired()) {
-            throw new InvalidRefreshTokenException("유효하지 않은 리프레시 토큰입니다");
-        }
+        // 도메인 모델의 비즈니스 규칙 검증 (만료 여부)
+        refreshToken.validateNotExpired();
 
+        // 사용자 조회
         User user = loadUserPort.findById(refreshToken.getUserId())
                 .orElseThrow(() -> new InvalidRefreshTokenException("유효하지 않은 리프레시 토큰입니다"));
 
+        // 새로운 액세스 토큰 생성
         String accessToken = jwtPort.generateAccessToken(
                 user.getId(),
                 user.getEmail(),

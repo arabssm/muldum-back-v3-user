@@ -19,15 +19,22 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
-        return new OpenAPI()
+        OpenAPI openAPI = new OpenAPI()
                 .info(new Info()
                         .title(swaggerProperties.getTitle())
                         .description(swaggerProperties.getDescription())
-                        .version(swaggerProperties.getVersion()))
-                .servers(List.of(
-                        new Server()
-                                .url(swaggerProperties.getServer().getUrl())
-                                .description(swaggerProperties.getServer().getDescription())
-                ));
+                        .version(swaggerProperties.getVersion()));
+
+        // Server 설정이 있는 경우에만 추가
+        if (swaggerProperties.getServer() != null
+                && swaggerProperties.getServer().getUrl() != null) {
+            openAPI.servers(List.of(
+                    new Server()
+                            .url(swaggerProperties.getServer().getUrl())
+                            .description(swaggerProperties.getServer().getDescription())
+            ));
+        }
+
+        return openAPI;
     }
 }

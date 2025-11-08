@@ -14,9 +14,9 @@ public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(GlobalException.class)
-    public ResponseEntity<ErrorResponse> handleGlobalException(GlobalException ex) {
-        log.error("Handled global exception [{}]: {}", ex.getErrorCode(), ex.getMessage(), ex);
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
+        log.error("Business exception occurred: [{}] {}", ex.getErrorCode(), ex.getMessage(), ex);
         ErrorResponse errorResponse = ErrorResponse.of(ex.getErrorCode(), ex.getMessage(), ex.getDetails());
         return ResponseEntity.status(ex.getHttpStatus()).body(errorResponse);
     }
