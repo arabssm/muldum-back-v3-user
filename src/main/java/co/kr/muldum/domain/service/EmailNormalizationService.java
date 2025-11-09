@@ -1,6 +1,6 @@
 package co.kr.muldum.domain.service;
 
-import co.kr.muldum.domain.exception.InvalidEmailException;
+import co.kr.muldum.global.exception.InvalidEmailException;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;

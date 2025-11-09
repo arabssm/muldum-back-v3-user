@@ -6,21 +6,21 @@ import co.kr.muldum.application.port.in.response.RefreshTokenResponse;
 import co.kr.muldum.application.port.out.JwtPort;
 import co.kr.muldum.application.port.out.LoadRefreshTokenPort;
 import co.kr.muldum.application.port.out.LoadUserPort;
-import co.kr.muldum.domain.exception.InvalidRefreshTokenException;
 import co.kr.muldum.domain.model.RefreshToken;
 import co.kr.muldum.domain.model.User;
+import co.kr.muldum.global.exception.InvalidRefreshTokenException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-public class RefreshAccessTokenService implements RefreshAccessTokenUseCase {
+public class RefreshAccessTokenServiceImpl implements RefreshAccessTokenUseCase {
 
     private final LoadRefreshTokenPort loadRefreshTokenPort;
     private final LoadUserPort loadUserPort;
     private final JwtPort jwtPort;
 
-    public RefreshAccessTokenService(
+    public RefreshAccessTokenServiceImpl(
             LoadRefreshTokenPort loadRefreshTokenPort,
             LoadUserPort loadUserPort,
             JwtPort jwtPort) {
@@ -35,8 +35,10 @@ public class RefreshAccessTokenService implements RefreshAccessTokenUseCase {
         RefreshToken refreshToken = loadRefreshTokenPort.findByToken(command.getRefreshToken())
                 .orElseThrow(() -> new InvalidRefreshTokenException("유효하지 않은 리프레시 토큰입니다"));
 
-        // 도메인 모델의 비즈니스 규칙 검증 (만료 여부)
-        refreshToken.validateNotExpired();
+        // 토큰 만료 검증
+        if (refreshToken.isExpired()) {
+            throw new InvalidRefreshTokenException("유효하지 않은 리프레시 토큰입니다");
+        }
 
         // 사용자 조회
         User user = loadUserPort.findById(refreshToken.getUserId())

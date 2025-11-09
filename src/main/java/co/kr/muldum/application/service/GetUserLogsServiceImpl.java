@@ -11,11 +11,11 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-public class GetUserLogsService implements GetUserLogsUseCase {
+public class GetUserLogsServiceImpl implements GetUserLogsUseCase {
 
     private final LoadUserLogPort loadUserLogPort;
 
-    public GetUserLogsService(LoadUserLogPort loadUserLogPort) {
+    public GetUserLogsServiceImpl(LoadUserLogPort loadUserLogPort) {
         this.loadUserLogPort = loadUserLogPort;
     }
 
