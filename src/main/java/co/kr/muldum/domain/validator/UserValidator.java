@@ -1,6 +1,6 @@
 package co.kr.muldum.domain.validator;
 
-import co.kr.muldum.domain.exception.UserValidationException;
+import co.kr.muldum.global.exception.UserValidationException;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

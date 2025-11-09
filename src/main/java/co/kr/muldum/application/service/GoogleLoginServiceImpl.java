@@ -12,6 +12,7 @@ import co.kr.muldum.domain.model.RefreshToken;
 import co.kr.muldum.domain.model.User;
 import co.kr.muldum.domain.service.EmailNormalizationService;
 import co.kr.muldum.global.exception.UnregisteredUserException;
+import co.kr.muldum.infrastructure.messaging.UserEventPublisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class GoogleLoginServiceImpl implements GoogleLoginUseCase {
     private final RefreshTokenPort refreshTokenPort;
     private final SaveRefreshTokenPort saveRefreshTokenPort;
     private final EmailNormalizationService emailNormalizationService;
+    private final UserEventPublisher userEventPublisher;
 
     public GoogleLoginServiceImpl(
             GoogleOAuthPort googleOAuthPort,
@@ -36,13 +38,15 @@ public class GoogleLoginServiceImpl implements GoogleLoginUseCase {
             JwtPort jwtPort,
             RefreshTokenPort refreshTokenPort,
             SaveRefreshTokenPort saveRefreshTokenPort,
-            EmailNormalizationService emailNormalizationService) {
+            EmailNormalizationService emailNormalizationService,
+            UserEventPublisher userEventPublisher) {
         this.googleOAuthPort = googleOAuthPort;
         this.loadUserPort = loadUserPort;
         this.jwtPort = jwtPort;
         this.refreshTokenPort = refreshTokenPort;
         this.saveRefreshTokenPort = saveRefreshTokenPort;
         this.emailNormalizationService = emailNormalizationService;
+        this.userEventPublisher = userEventPublisher;
     }
 
     @Override
@@ -68,6 +72,9 @@ public class GoogleLoginServiceImpl implements GoogleLoginUseCase {
         // 리프레시 토큰 생성 및 저장
         RefreshToken refreshToken = refreshTokenPort.generateRefreshToken(user.getId());
         saveRefreshTokenPort.save(refreshToken);
+
+        // Publish login event for downstream consumers
+        userEventPublisher.publishLoginEvent(user);
 
         return LoginResponse.of(
                 user.getId(),

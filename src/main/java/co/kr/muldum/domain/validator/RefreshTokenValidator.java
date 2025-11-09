@@ -1,6 +1,6 @@
 package co.kr.muldum.domain.validator;
 
-import co.kr.muldum.domain.exception.RefreshTokenValidationException;
+import co.kr.muldum.global.exception.RefreshTokenValidationException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

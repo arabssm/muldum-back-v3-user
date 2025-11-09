@@ -13,7 +13,7 @@ public class User {
     private final Integer classNo;
     private final Integer grade;
     private final Role userRole;
-    private final Long teamId; // Member 테이블에서 조회한 값
+    private final Long teamId;
 
     protected User(UUID id,
                    String name,

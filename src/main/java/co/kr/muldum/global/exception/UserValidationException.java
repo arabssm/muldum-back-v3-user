@@ -1,4 +1,4 @@
-package co.kr.muldum.domain.exception;
+package co.kr.muldum.global.exception;
 
 import java.util.Map;
 

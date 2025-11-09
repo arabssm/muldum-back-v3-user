@@ -1,4 +1,4 @@
-package co.kr.muldum.domain.exception;
+package co.kr.muldum.global.exception;
 
 import org.springframework.http.HttpStatus;
 

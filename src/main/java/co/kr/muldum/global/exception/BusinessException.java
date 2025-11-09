@@ -33,19 +33,12 @@ public abstract class BusinessException extends RuntimeException {
         this.details = details == null ? Map.of() : Map.copyOf(details);
     }
 
-    protected BusinessException(String message,
-                                HttpStatus httpStatus,
-                                String errorCode,
-                                Map<String, Object> details) {
-        super(message, httpStatus, errorCode, details);
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
     }
 
-    protected BusinessException(String message,
-                                HttpStatus httpStatus,
-                                String errorCode,
-                                Map<String, Object> details,
-                                Throwable cause) {
-        super(message, httpStatus, errorCode, details, cause);
+    public String getErrorCode() {
+        return errorCode;
     }
 
     public Map<String, Object> getDetails() {

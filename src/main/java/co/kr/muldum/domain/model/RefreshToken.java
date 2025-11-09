@@ -1,11 +1,10 @@
 package co.kr.muldum.domain.model;
 
-import co.kr.muldum.domain.exception.InvalidRefreshTokenException;
+import co.kr.muldum.global.exception.InvalidRefreshTokenException;
 import lombok.Getter;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.UUID;
 
 @Getter

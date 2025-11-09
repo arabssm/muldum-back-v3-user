@@ -15,21 +15,18 @@ public class UserPersistenceAdapter implements LoadUserPort {
     private static final Logger log = LoggerFactory.getLogger(UserPersistenceAdapter.class);
 
     private final UserJpaRepository userJpaRepository;
-    private final MemberJpaRepository memberJpaRepository;
     private final UserMapper userMapper;
 
     public UserPersistenceAdapter(UserJpaRepository userJpaRepository,
-                                  MemberJpaRepository memberJpaRepository,
                                   UserMapper userMapper) {
         this.userJpaRepository = userJpaRepository;
-        this.memberJpaRepository = memberJpaRepository;
         this.userMapper = userMapper;
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
         try {
-            Optional<UserJpaEntity> userEntity = userJpaRepository.findByEmailIgnoreCase(email);
+            Optional<UserJpaEntity> userEntity = userJpaRepository.findByEmailIgnoreCaseWithMember(email);
 
             if (userEntity.isEmpty()) {
                 return Optional.empty();
@@ -37,11 +34,7 @@ public class UserPersistenceAdapter implements LoadUserPort {
 
             UserJpaEntity entity = userEntity.get();
 
-            Long teamId = memberJpaRepository.findByUserId(entity.getId())
-                    .map(MemberJpaEntity::getTeamId)
-                    .orElse(null);
-
-            return Optional.of(userMapper.toDomain(entity, teamId));
+            return Optional.of(userMapper.toDomain(entity, extractTeamId(entity)));
         } catch (Exception e) {
             log.error("DB 조회 중 예외 발생!", e);
             throw e;
@@ -51,7 +44,7 @@ public class UserPersistenceAdapter implements LoadUserPort {
     @Override
     public Optional<User> findById(UUID id) {
         try {
-            Optional<UserJpaEntity> userEntity = userJpaRepository.findById(id);
+            Optional<UserJpaEntity> userEntity = userJpaRepository.findByIdWithMember(id);
 
             if (userEntity.isEmpty()) {
                 return Optional.empty();
@@ -59,14 +52,14 @@ public class UserPersistenceAdapter implements LoadUserPort {
 
             UserJpaEntity entity = userEntity.get();
 
-            Long teamId = memberJpaRepository.findByUserId(entity.getId())
-                    .map(MemberJpaEntity::getTeamId)
-                    .orElse(null);
-
-            return Optional.of(userMapper.toDomain(entity, teamId));
+            return Optional.of(userMapper.toDomain(entity, extractTeamId(entity)));
         } catch (Exception e) {
             log.error("DB 조회 중 예외 발생!", e);
             throw e;
         }
+    }
+
+    private Long extractTeamId(UserJpaEntity entity) {
+        return entity.getMember() != null ? entity.getMember().getTeamId() : null;
     }
 }

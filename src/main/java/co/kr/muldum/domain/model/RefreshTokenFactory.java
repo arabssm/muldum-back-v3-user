@@ -3,6 +3,7 @@ package co.kr.muldum.domain.model;
 import co.kr.muldum.domain.validator.RefreshTokenValidator;
 import org.springframework.stereotype.Component;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -10,9 +11,11 @@ import java.util.UUID;
 public class RefreshTokenFactory {
 
     private final RefreshTokenValidator refreshTokenValidator;
+    private final Clock clock;
 
-    public RefreshTokenFactory(RefreshTokenValidator refreshTokenValidator) {
+    public RefreshTokenFactory(RefreshTokenValidator refreshTokenValidator, Clock clock) {
         this.refreshTokenValidator = refreshTokenValidator;
+        this.clock = clock;
     }
 
     public RefreshToken create(RefreshTokenCreateCommand command) {
@@ -22,7 +25,7 @@ public class RefreshTokenFactory {
                 command.expiryDate()
         ));
 
-        return new RefreshToken(command.token(), command.userId(), command.expiryDate());
+        return RefreshToken.from(command.token(), command.userId(), command.expiryDate(), clock);
     }
 
     public record RefreshTokenCreateCommand(String token, UUID userId, LocalDateTime expiryDate) {
