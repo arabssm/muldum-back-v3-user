@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/auth/sup")
+@RequestMapping("/sup/user")
 public class SuperAdminLogController {
 
     private final GetUserLogsUseCase getUserLogsUseCase;
@@ -24,7 +24,7 @@ public class SuperAdminLogController {
         this.getUserLogsUseCase = getUserLogsUseCase;
     }
 
-    @GetMapping("/user/logs")
+    @GetMapping("/logs")
     public ResponseEntity<List<UserLogResponseDto>> getUserLogs(
             @RequestParam(required = false) String type) {
         GetUserLogsCommand command = GetUserLogsCommand.of(type);
