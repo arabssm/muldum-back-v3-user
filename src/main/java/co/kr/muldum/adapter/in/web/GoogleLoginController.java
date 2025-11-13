@@ -71,14 +71,11 @@ public class GoogleLoginController {
 
             Map<String, Object> response = new java.util.HashMap<>();
             response.put("message", "로그인 성공!");
-            response.put("role", loginResponse.getRole().toString());
+            response.put("userType", loginResponse.getUserType().toString());
             response.put("userId", loginResponse.getUserId());
             response.put("name", loginResponse.getName());
             response.put("accessToken", loginResponse.getAccessToken());
             response.put("refreshToken", loginResponse.getRefreshToken());
-            if (loginResponse.getTeamId() != null) {
-                response.put("teamId", loginResponse.getTeamId());
-            }
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of(
