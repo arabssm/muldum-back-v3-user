@@ -13,28 +13,22 @@ public class UserMapper {
         this.userFactory = userFactory;
     }
 
-    public User toDomain(UserJpaEntity entity, Long teamId) {
+    public User toDomain(UserJpaEntity entity) {
         return userFactory.create(new UserFactory.UserCreateCommand(
                 entity.getId(),
-                entity.getName(),
-                entity.getEnrolledAt(),
                 entity.getEmail(),
-                entity.getClassNo(),
-                entity.getGrade(),
-                entity.getUserRole(),
-                teamId
+                entity.getName(),
+                entity.getProfile(),
+                entity.getUserType()
         ));
     }
 
     public UserJpaEntity toEntity(User user) {
-        return new UserJpaEntity(
-                user.getId(),
-                user.getName(),
-                user.getEnrolledAt(),
+        return UserJpaEntity.of(
                 user.getEmail(),
-                user.getClassNo(),
-                user.getGrade(),
-                user.getUserRole()
+                user.getName(),
+                user.getProfile(),
+                user.getUserType()
         );
     }
 }

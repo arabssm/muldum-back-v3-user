@@ -23,10 +23,10 @@ public class LogoutServiceImpl implements LogoutUseCase {
     @Override
     public void logout(LogoutCommand command) {
         // 리프레시 토큰 존재 확인
-        loadRefreshTokenPort.findByToken(command.getRefreshToken())
+        loadRefreshTokenPort.findByRefreshToken(command.getRefreshToken())
                 .orElseThrow(() -> new InvalidRefreshTokenException("유효한 리프레시 토큰이 없습니다."));
 
         // 리프레시 토큰 삭제
-        deleteRefreshTokenPort.deleteByToken(command.getRefreshToken());
+        deleteRefreshTokenPort.deleteByRefreshToken(command.getRefreshToken());
     }
 }

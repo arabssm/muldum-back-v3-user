@@ -17,31 +17,22 @@ public class UserFactory {
     public User create(UserCreateCommand command) {
         userValidator.validate(new UserValidator.Target(
                 command.email(),
-                command.name(),
-                command.enrolledAt(),
-                command.classNo(),
-                command.grade()
+                command.name()
         ));
 
         return new User(
                 command.id(),
-                command.name(),
-                command.enrolledAt(),
                 command.email(),
-                command.classNo(),
-                command.grade(),
-                command.userRole(),
-                command.teamId()
+                command.name(),
+                command.profile(),
+                command.userType()
         );
     }
 
     public record UserCreateCommand(UUID id,
-                                    String name,
-                                    Integer enrolledAt,
                                     String email,
-                                    Integer classNo,
-                                    Integer grade,
-                                    Role userRole,
-                                    Long teamId) {
+                                    String name,
+                                    UserProfile profile,
+                                    UserType userType) {
     }
 }

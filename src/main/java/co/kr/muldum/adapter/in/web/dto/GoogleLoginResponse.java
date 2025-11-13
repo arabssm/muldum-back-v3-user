@@ -1,7 +1,7 @@
 package co.kr.muldum.adapter.in.web.dto;
 
 import co.kr.muldum.application.port.in.response.LoginResponse;
-import co.kr.muldum.domain.model.Role;
+import co.kr.muldum.domain.model.UserType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 
@@ -11,28 +11,25 @@ import java.util.UUID;
 @Getter
 public class GoogleLoginResponse {
 
-    private final Role role;
+    private final UserType userType;
     private final UUID userId;
     private final String name;
-    private final Long teamId;
     private final String accessToken;
     private final String refreshToken;
 
-    private GoogleLoginResponse(Role role, UUID userId, String name, Long teamId, String accessToken, String refreshToken) {
-        this.role = role;
+    private GoogleLoginResponse(UserType userType, UUID userId, String name, String accessToken, String refreshToken) {
+        this.userType = userType;
         this.userId = userId;
         this.name = name;
-        this.teamId = teamId;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
 
     public static GoogleLoginResponse from(LoginResponse loginResponse) {
         return new GoogleLoginResponse(
-            loginResponse.getRole(),
+            loginResponse.getUserType(),
             loginResponse.getUserId(),
             loginResponse.getName(),
-            loginResponse.getTeamId(),
             loginResponse.getAccessToken(),
             loginResponse.getRefreshToken()
         );

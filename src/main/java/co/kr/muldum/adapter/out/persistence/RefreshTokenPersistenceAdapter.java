@@ -7,61 +7,56 @@ import co.kr.muldum.domain.model.RefreshToken;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Clock;
-import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 public class RefreshTokenPersistenceAdapter implements SaveRefreshTokenPort, LoadRefreshTokenPort, DeleteRefreshTokenPort {
 
     private final RefreshTokenJpaRepository refreshTokenJpaRepository;
     private final RefreshTokenMapper refreshTokenMapper;
-    private final Clock clock;
 
     public RefreshTokenPersistenceAdapter(RefreshTokenJpaRepository refreshTokenJpaRepository,
-                                          RefreshTokenMapper refreshTokenMapper,
-                                          Clock clock) {
+                                          RefreshTokenMapper refreshTokenMapper) {
         this.refreshTokenJpaRepository = refreshTokenJpaRepository;
         this.refreshTokenMapper = refreshTokenMapper;
-        this.clock = clock;
     }
 
     @Override
     @Transactional
     public void save(RefreshToken refreshToken) {
-        // 만료된 토큰 정리 후 저장
-        refreshTokenJpaRepository.deleteExpiredTokens(LocalDateTime.now(clock));
-        refreshTokenJpaRepository.findByUserId(refreshToken.getUserId())
-                .ifPresent(refreshTokenJpaRepository::delete);
-
-        RefreshTokenJpaEntity entity = refreshTokenMapper.toEntity(refreshToken);
-        refreshTokenJpaRepository.save(entity);
+        refreshTokenJpaRepository.findByEmail(refreshToken.getEmail())
+                .ifPresentOrElse(
+                        existing -> existing.updateToken(refreshToken.getRefreshToken()),
+                        () -> {
+                            RefreshTokenJpaEntity entity = refreshTokenMapper.toEntity(refreshToken);
+                            refreshTokenJpaRepository.save(entity);
+                        }
+                );
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<RefreshToken> findByToken(String token) {
-        return refreshTokenJpaRepository.findByToken(token)
+    public Optional<RefreshToken> findByRefreshToken(String refreshToken) {
+        return refreshTokenJpaRepository.findByRefreshToken(refreshToken)
                 .map(refreshTokenMapper::toDomain);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<RefreshToken> findByUserId(UUID userId) {
-        return refreshTokenJpaRepository.findByUserId(userId)
+    public Optional<RefreshToken> findByEmail(String email) {
+        return refreshTokenJpaRepository.findByEmail(email)
                 .map(refreshTokenMapper::toDomain);
     }
 
     @Override
     @Transactional
-    public void deleteByUserId(UUID userId) {
-        refreshTokenJpaRepository.deleteByUserId(userId);
+    public void deleteByEmail(String email) {
+        refreshTokenJpaRepository.deleteByEmail(email);
     }
 
     @Override
     @Transactional
-    public void deleteByToken(String token) {
-        refreshTokenJpaRepository.deleteByToken(token);
+    public void deleteByRefreshToken(String refreshToken) {
+        refreshTokenJpaRepository.deleteByRefreshToken(refreshToken);
     }
 }

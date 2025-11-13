@@ -15,18 +15,6 @@ public class UserValidator implements DomainValidator<UserValidator.Target> {
     public void validate(Target target) {
         validateEmail(target.email());
         validateName(target.name());
-
-        if (target.enrolledAt() != null) {
-            validateEnrolledAt(target.enrolledAt());
-        }
-
-        if (target.classNo() != null) {
-            validateClassNo(target.classNo());
-        }
-
-        if (target.grade() != null) {
-            validateGrade(target.grade());
-        }
     }
 
     public void validateEmail(String email) {
@@ -75,6 +63,6 @@ public class UserValidator implements DomainValidator<UserValidator.Target> {
         }
     }
 
-    public record Target(String email, String name, Integer enrolledAt, Integer classNo, Integer grade) {
+    public record Target(String email, String name) {
     }
 }

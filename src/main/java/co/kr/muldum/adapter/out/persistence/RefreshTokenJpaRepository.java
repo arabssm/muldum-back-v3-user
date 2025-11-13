@@ -5,25 +5,19 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface RefreshTokenJpaRepository extends JpaRepository<RefreshTokenJpaEntity, Long> {
 
-    Optional<RefreshTokenJpaEntity> findByToken(String token);
+    Optional<RefreshTokenJpaEntity> findByEmail(String email);
 
-    Optional<RefreshTokenJpaEntity> findByUserId(UUID userId);
-
-    @Modifying
-    @Query("DELETE FROM RefreshTokenJpaEntity r WHERE r.userId = :userId")
-    void deleteByUserId(@Param("userId") UUID userId);
+    Optional<RefreshTokenJpaEntity> findByRefreshToken(String refreshToken);
 
     @Modifying
-    @Query("DELETE FROM RefreshTokenJpaEntity r WHERE r.token = :token")
-    void deleteByToken(@Param("token") String token);
+    @Query("DELETE FROM RefreshTokenJpaEntity r WHERE r.email = :email")
+    void deleteByEmail(@Param("email") String email);
 
     @Modifying
-    @Query("DELETE FROM RefreshTokenJpaEntity r WHERE r.expiryDate < :now")
-    void deleteExpiredTokens(@Param("now") LocalDateTime now);
+    @Query("DELETE FROM RefreshTokenJpaEntity r WHERE r.refreshToken = :refreshToken")
+    void deleteByRefreshToken(@Param("refreshToken") String refreshToken);
 }

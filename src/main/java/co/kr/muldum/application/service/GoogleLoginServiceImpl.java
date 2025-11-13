@@ -66,11 +66,11 @@ public class GoogleLoginServiceImpl implements GoogleLoginUseCase {
         String accessToken = jwtPort.generateAccessToken(
                 user.getId(),
                 user.getEmail(),
-                user.getUserRole().getValue()
+                user.getUserType().getValue()
         );
 
         // 리프레시 토큰 생성 및 저장
-        RefreshToken refreshToken = refreshTokenPort.generateRefreshToken(user.getId());
+        RefreshToken refreshToken = refreshTokenPort.generateRefreshToken(user.getEmail());
         saveRefreshTokenPort.save(refreshToken);
 
         // Publish login event for downstream consumers
@@ -79,10 +79,9 @@ public class GoogleLoginServiceImpl implements GoogleLoginUseCase {
         return LoginResponse.of(
                 user.getId(),
                 user.getName(),
-                user.getUserRole(),
-                user.getTeamId(),
+                user.getUserType(),
                 accessToken,
-                refreshToken.getToken()
+                refreshToken.getRefreshToken()
         );
     }
 }

@@ -26,15 +26,8 @@ public class UserPersistenceAdapter implements LoadUserPort {
     @Override
     public Optional<User> findByEmail(String email) {
         try {
-            Optional<UserJpaEntity> userEntity = userJpaRepository.findByEmailIgnoreCaseWithMember(email);
-
-            if (userEntity.isEmpty()) {
-                return Optional.empty();
-            }
-
-            UserJpaEntity entity = userEntity.get();
-
-            return Optional.of(userMapper.toDomain(entity, extractTeamId(entity)));
+            return userJpaRepository.findByEmailIgnoreCase(email)
+                    .map(userMapper::toDomain);
         } catch (Exception e) {
             log.error("DB 조회 중 예외 발생!", e);
             throw e;
@@ -44,22 +37,11 @@ public class UserPersistenceAdapter implements LoadUserPort {
     @Override
     public Optional<User> findById(UUID id) {
         try {
-            Optional<UserJpaEntity> userEntity = userJpaRepository.findByIdWithMember(id);
-
-            if (userEntity.isEmpty()) {
-                return Optional.empty();
-            }
-
-            UserJpaEntity entity = userEntity.get();
-
-            return Optional.of(userMapper.toDomain(entity, extractTeamId(entity)));
+            return userJpaRepository.findById(id)
+                    .map(userMapper::toDomain);
         } catch (Exception e) {
             log.error("DB 조회 중 예외 발생!", e);
             throw e;
         }
-    }
-
-    private Long extractTeamId(UserJpaEntity entity) {
-        return entity.getMember() != null ? entity.getMember().getTeamId() : null;
     }
 }

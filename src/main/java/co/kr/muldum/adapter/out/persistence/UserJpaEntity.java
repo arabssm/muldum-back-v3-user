@@ -1,12 +1,20 @@
 package co.kr.muldum.adapter.out.persistence;
 
-import co.kr.muldum.domain.model.Role;
+import co.kr.muldum.domain.model.UserProfile;
+import co.kr.muldum.domain.model.UserType;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
 
 @Entity
-@Table(name = "\"user\"")
+@Table(name = "users")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserJpaEntity {
 
     @Id
@@ -14,72 +22,28 @@ public class UserJpaEntity {
     @Column(name = "id")
     private UUID id;
 
-    @Column(nullable = false, length = 4)
-    private String name;
-
-    @Column(name = "enrolled_at", nullable = false)
-    private Integer enrolledAt;
-
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String email;
 
-    @Column(name = "class_no", nullable = false)
-    private Integer classNo;
-
     @Column(nullable = false)
-    private Integer grade;
+    private String name;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private UserProfile profile;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_role", nullable = false)
-    private Role userRole;
+    @Column(name = "user_type", length = 255)
+    private UserType userType;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "user_id", insertable = false, updatable = false)
-    private MemberJpaEntity member;
-
-    protected UserJpaEntity() {
-    }
-
-    public UserJpaEntity(UUID id, String name, Integer enrolledAt, String email,
-                         Integer classNo, Integer grade, Role userRole) {
-        this.id = id;
-        this.name = name;
-        this.enrolledAt = enrolledAt;
+    protected UserJpaEntity(String email, String name, UserProfile profile, UserType userType) {
         this.email = email;
-        this.classNo = classNo;
-        this.grade = grade;
-        this.userRole = userRole;
+        this.name = name;
+        this.profile = profile;
+        this.userType = userType;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Integer getEnrolledAt() {
-        return enrolledAt;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Integer getClassNo() {
-        return classNo;
-    }
-
-    public Integer getGrade() {
-        return grade;
-    }
-
-    public Role getUserRole() {
-        return userRole;
-    }
-
-    public MemberJpaEntity getMember() {
-        return member;
+    public static UserJpaEntity of(String email, String name, UserProfile profile, UserType userType) {
+        return new UserJpaEntity(email, name, profile, userType);
     }
 }
